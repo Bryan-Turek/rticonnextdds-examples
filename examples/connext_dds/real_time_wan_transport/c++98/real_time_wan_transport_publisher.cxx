@@ -19,6 +19,7 @@
 #include "ndds/ndds_cpp.h"
 #include "ndds/ndds_namespace_cpp.h"
 #include "application.h"
+#include "INIReader.h"
 
 using namespace DDS;
 
@@ -126,12 +127,25 @@ int run_publisher_application(
                 EXIT_FAILURE);
     }
 
+    INIReader reader("./test.ini");
+
+    if (reader.ParseError() < 0) {
+        std::cout << "Can't load 'test.ini'\n";
+        return shutdown_participant(
+                participant,
+                "HelloWorldTypeSupport::create_data test.ini unreadable",
+                EXIT_FAILURE);
+    }
+
+    unsigned int init_count = (unsigned int)reader.GetInteger("message", "number", 0);
+    std::string config_message = reader.Get("message", "message", "Hello World");
+
     // Main loop, write data
-    for (unsigned int samples_written = 0;
+    for (unsigned int samples_written = init_count;
          !shutdown_requested && samples_written < sample_count;
          ++samples_written) {
         // Modify the data to be written here
-        sprintf(data->msg, "Hello World %u", samples_written);
+        sprintf(data->msg, "%s %u", config_message.c_str(), samples_written);
 
         std::cout << "Writing HelloWorld, count " << samples_written
                   << std::endl;
