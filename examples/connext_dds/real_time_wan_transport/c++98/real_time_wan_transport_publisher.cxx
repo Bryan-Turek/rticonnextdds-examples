@@ -134,7 +134,7 @@ int run_publisher_application(
         std::cout << "Can't load '" << config_file << "'\n";
         return shutdown_participant(
                 participant,
-                "HelloWorldTypeSupport::create_data " << config_file << " unreadable",
+                "HelloWorldTypeSupport::create_data config_file unreadable",
                 EXIT_FAILURE);
     }
 
