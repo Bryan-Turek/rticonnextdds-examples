@@ -33,7 +33,8 @@ static int shutdown_participant(
 int run_publisher_application(
         unsigned int domain_id,
         unsigned int sample_count,
-        unsigned int scenario)
+        unsigned int scenario,
+        char *config_file)
 {
     const char *libraryName = "RWT_Library";
     char profileName[64];
@@ -127,7 +128,7 @@ int run_publisher_application(
                 EXIT_FAILURE);
     }
 
-    INIReader reader("./test.ini");
+    INIReader reader(config_file);
 
     if (reader.ParseError() < 0) {
         std::cout << "Can't load 'test.ini'\n";
@@ -217,7 +218,8 @@ int main(int argc, char *argv[])
     int status = run_publisher_application(
             arguments.domain_id,
             arguments.sample_count,
-            arguments.scenario);
+            arguments.scenario,
+            arguments.config_file);
 
     // Releases the memory used by the participant factory.  Optional at
     // application exit

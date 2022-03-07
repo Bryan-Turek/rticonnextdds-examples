@@ -42,6 +42,7 @@ struct ApplicationArguments {
     unsigned int sample_count;
     unsigned int scenario;
     NDDS_Config_LogVerbosity verbosity;
+    char *config_file;
 };
 
 inline void set_verbosity(ApplicationArguments &arguments, int verbosity)
@@ -96,6 +97,12 @@ inline void parse_arguments(
                 && (strcmp(argv[arg_processing], "-c") == 0
                     || strcmp(argv[arg_processing], "--scenario") == 0)) {
             arguments.scenario = atoi(argv[arg_processing + 1]);
+            arg_processing += 2;
+        } else if (
+                (argc > arg_processing + 1)
+                && (strcmp(argv[arg_processing], "-C") == 0
+                    || strcmp(argv[arg_processing], "--config") == 0)) {
+            arguments.config_file = argv[arg_processing + 1];
             arg_processing += 2;
         } else if (
                 (argc > arg_processing + 1)
