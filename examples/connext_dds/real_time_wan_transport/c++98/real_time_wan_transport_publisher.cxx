@@ -131,10 +131,10 @@ int run_publisher_application(
     INIReader reader(config_file);
 
     if (reader.ParseError() < 0) {
-        std::cout << "Can't load 'test.ini'\n";
+        std::cout << "Can't load '" << config_file << "'\n";
         return shutdown_participant(
                 participant,
-                "HelloWorldTypeSupport::create_data test.ini unreadable",
+                "HelloWorldTypeSupport::create_data " << config_file << " unreadable",
                 EXIT_FAILURE);
     }
 
@@ -148,7 +148,7 @@ int run_publisher_application(
         // Modify the data to be written here
         sprintf(data->msg, "%s %u", config_message.c_str(), samples_written);
 
-        std::cout << "Writing HelloWorld, count " << samples_written
+        std::cout << "Writing " << config_message << ", count " << samples_written
                   << std::endl;
         retcode = typed_writer->write(*data, HANDLE_NIL);
         if (retcode != RETCODE_OK) {
